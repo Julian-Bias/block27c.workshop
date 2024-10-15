@@ -1,3 +1,4 @@
+import { useGetPuppyQuery, useDeletePuppyMutation } from "./puppySlice";
 /**
  * @component
  * Shows comprehensive information about the selected puppy, if there is one.
@@ -5,11 +6,20 @@
  */
 export default function PuppyDetails({ selectedPuppyId, setSelectedPuppyId }) {
   // TODO: Grab data from the `getPuppy` query
+  const { data: puppy, isLoading, error } = useGetPuppyQuery(selectedPuppyId, {
+    skip: !selectedPuppyId,
+  });
 
   // TODO: Use the `deletePuppy` mutation to remove a puppy when the button is clicked
+  const [deletePuppy, { isLoading: isDeleting }] = useDeletePuppyMutation();
 
-  function removePuppy(id) {
-    setSelectedPuppyId();
+  async function removePuppy(id) {
+    try {
+      await deletePuppy(id);
+      setSelectedPuppyId();
+    } catch (err) {
+      console.error("Failed to delete the puppy:", err);
+    }
   }
 
   // There are 3 possibilities:
@@ -21,6 +31,9 @@ export default function PuppyDetails({ selectedPuppyId, setSelectedPuppyId }) {
   //  2. A puppy has been selected, but results have not yet returned from the API.
   else if (isLoading) {
     $details = <p>Loading puppy information...</p>;
+  }
+  else if (error) {
+    $details = <p>Error fetching puppy information: {error.message}</p>
   }
   // 3. Information about the selected puppy has returned from the API.
   else {

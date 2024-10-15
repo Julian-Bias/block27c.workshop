@@ -1,29 +1,37 @@
+import { useGetPuppiesQuery } from "./puppySlice";
+
 /**
  * @component
- * Shows a list of puppies in the roster.
- * Users can select a puppy to see more information about it.
+ * Shows a list of Players in the roster.
+ * Users can select a Player to see more information about it.
  */
-export default function PuppyList({ setSelectedPuppyId }) {
-  // TODO: Get data from getPuppies query
+export default function puppyList({ setPuppyId }) {
+  // TODO: Get data from getPlayers query
+  const { data: puppies = [], isLoading, error } = useGetPuppiesQuery();
 
   return (
     <article>
-      <h2>Roster</h2>
+      <h2>Puppy Roster</h2>
       <ul className="puppies">
-        {isLoading && <li>Loading puppies...</li>}
-        {puppies.map((p) => (
-          <li key={p.id}>
-            <h3>
-              {p.name} #{p.id}
-            </h3>
-            <figure>
-              <img src={p.imageUrl} alt={p.name} />
-            </figure>
-            <button onClick={() => setSelectedPuppyId(p.id)}>
-              See details
-            </button>
-          </li>
-        ))}
+        {isLoading && <li>Loading Puppies...</li>}
+        {error && <li>Error fetching Puppies: {error.message}</li>}
+        {Array.isArray(puppies) ? (
+          puppies.map((puppy) => (
+            <li key={puppy.id}>
+              <h3>
+                {puppy.name} #{puppy.id}
+              </h3>
+              <figure>
+                <img src={puppy.imageUrl} alt={puppy.name} />
+              </figure>
+              <button onClick={() => setSelectedPuppyId(puppy.id)}>
+                See details
+              </button>
+            </li>
+          ))
+        ) : (
+          <li>No puppies available.</li>
+        )}
       </ul>
     </article>
   );
