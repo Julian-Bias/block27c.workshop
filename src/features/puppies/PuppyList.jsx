@@ -1,30 +1,30 @@
-import { useGetPuppiesQuery } from "./puppySlice";
+import { useGetPlayersQuery } from "./puppySlice";
 
 /**
  * @component
- * Shows a list of Players in the roster.
- * Users can select a Player to see more information about it.
+ * Shows a list of Puppies in the roster.
+ * Users can select a Puppy to see more information about it.
  */
-export default function puppyList({ setPuppyId }) {
-  // TODO: Get data from getPlayers query
-  const { data: puppies = [], isLoading, error } = useGetPuppiesQuery();
+export default function PlayerList({ setSelectedPlayerId }) {
+  // TODO: Get data from getPuppies query
+  const { data: players = [], isLoading, error } = useGetPlayersQuery();
 
   return (
     <article>
       <h2>Puppy Roster</h2>
-      <ul className="puppies">
+      <ul className="players">
         {isLoading && <li>Loading Puppies...</li>}
         {error && <li>Error fetching Puppies: {error.message}</li>}
-        {Array.isArray(puppies) ? (
-          puppies.map((puppy) => (
-            <li key={puppy.id}>
+        {Array.isArray(players) ? (
+          players.map((player) => (
+            <li key={player.id}>
               <h3>
-                {puppy.name} #{puppy.id}
+                {player.name} #{player.id}
               </h3>
               <figure>
-                <img src={puppy.imageUrl} alt={puppy.name} />
+                <img src={player.imageUrl} alt={player.name} />
               </figure>
-              <button onClick={() => setSelectedPuppyId(puppy.id)}>
+              <button onClick={() => setSelectedPlayerId(player.id)}>
                 See details
               </button>
             </li>

@@ -11,11 +11,11 @@ const api = createApi({
   tagTypes: ["Puppy"],
   endpoints: (builder) => ({
     getPlayers: builder.query({
-      query: () => "puppies",
+      query: () => "players",
       providesTags: ["Puppy"],
     }),
   }),
 });
 
-export const { useGetPuppiesQuery, useAddPuppyMutation } = api;
+export const { useGetPlayersQuery, useAddPlayerMutation } = api;
 export default api;

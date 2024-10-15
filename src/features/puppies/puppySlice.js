@@ -16,21 +16,21 @@ functions for each endpoint.
 
 const puppyApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getPuppies: build.query({
-      query: () => "puppies",
+    getPlayers: build.query({
+      query: () => "players",
       providesTags: ["Puppy"],
       transformResponse: (response) => response.data,
       transformErrorResponse: (error) => error.data,
     }),
-    getPuppy: build.query({
-      query: (puppyId) => `puppies/${puppyId}`,
+    getPlayer: build.query({
+      query: (puppyId) => `players/${puppyId}`,
       providesTags: ["Puppy"],
       transformResponse: (response) => response.data,
       transformErrorResponse: (error) => error.data,
     }),
-    addPuppy: build.mutation({
+    addPlayer: build.mutation({
       query: (newPuppy) => ({
-        url: "puppies",
+        url: "players",
         method: "POST",
         body: newPuppy,
       }),
@@ -38,9 +38,9 @@ const puppyApi = api.injectEndpoints({
       transformResponse: (response) => response.data,
       transformErrorResponse: (error) => error.data,
     }),
-    deletePuppy: build.mutation({
+    deletePlayer: build.mutation({
       query: (puppyId) => ({
-        url: `puppies/${puppyId}`,
+        url: `players/${puppyId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Puppy"],
@@ -51,9 +51,9 @@ const puppyApi = api.injectEndpoints({
 });
 
 export const {
-  useGetPuppiesQuery,
-  useGetPuppyQuery,
-  useAddPuppyMutation,
-  useDeletePuppyMutation,
+  useGetPlayersQuery,
+  useGetPlayerQuery,
+  useAddPlayerMutation,
+  useDeletePlayerMutation,
 } = puppyApi;
 export default puppyApi;

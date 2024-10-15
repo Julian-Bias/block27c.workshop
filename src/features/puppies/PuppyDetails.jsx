@@ -1,31 +1,31 @@
-import { useGetPuppyQuery, useDeletePuppyMutation } from "./puppySlice";
+import { useGetPlayerQuery, useDeletePlayerMutation } from "./puppySlice";
 /**
  * @component
  * Shows comprehensive information about the selected puppy, if there is one.
  * Also provides a button for users to remove the selected puppy from the roster.
  */
-export default function PuppyDetails({ selectedPuppyId, setSelectedPuppyId }) {
-  // TODO: Grab data from the `getPuppy` query
-  const { data: puppy, isLoading, error } = useGetPuppyQuery(selectedPuppyId, {
-    skip: !selectedPuppyId,
+export default function PlayerDetails({ selectedPlayerId, setSelectedPlayerId }) {
+  // Grab data from the `getPlayer` query
+  const { data: player, isLoading, error } = useGetPlayerQuery(selectedPlayerId, {
+    skip: !selectedPlayerId,
   });
 
   // TODO: Use the `deletePuppy` mutation to remove a puppy when the button is clicked
-  const [deletePuppy, { isLoading: isDeleting }] = useDeletePuppyMutation();
+  const [deletePlayer, { isLoading: isDeleting }] = useDeletePlayerMutation();
 
-  async function removePuppy(id) {
+  async function removePlayer(id) {
     try {
-      await deletePuppy(id);
-      setSelectedPuppyId();
+      await deletePlayer(id);
+      setSelectedPlayerId(); // Clear selected player ID after deletion
     } catch (err) {
-      console.error("Failed to delete the puppy:", err);
+      console.error("Failed to delete the player:", err);
     }
   }
 
   // There are 3 possibilities:
   let $details;
   // 1. A puppy has not yet been selected.
-  if (!selectedPuppyId) {
+  if (!selectedPlayerId) {
     $details = <p>Please select a puppy to see more details.</p>;
   }
   //  2. A puppy has been selected, but results have not yet returned from the API.
@@ -40,15 +40,15 @@ export default function PuppyDetails({ selectedPuppyId, setSelectedPuppyId }) {
     $details = (
       <>
         <h3>
-          {puppy.name} #{puppy.id}
+          {player.name} #{player.id}
         </h3>
-        <p>{puppy.breed}</p>
-        <p>Team {puppy.team?.name ?? "Unassigned"}</p>
-        <button onClick={() => removePuppy(puppy.id)}>
-          Remove from roster
+        <p>{player.breed}</p>
+        <p>Team {player.team?.name ?? "Unassigned"}</p>
+        <button onClick={() => removePlayer(player.id)} disabled={isDeleting}>
+          {isDeleting ? "Removing..." : "Remove from roster"}
         </button>
         <figure>
-          <img src={puppy.imageUrl} alt={puppy.name} />
+          <img src={player.imageUrl} alt={player.name} />
         </figure>
       </>
     );

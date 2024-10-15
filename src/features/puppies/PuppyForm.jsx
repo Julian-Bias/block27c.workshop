@@ -1,37 +1,37 @@
 import { useState } from "react";
-import { useAddPuppyMutation } from "./puppySlice";
+import { useAddPlayerMutation } from "./puppySlice";
 
 /**
  * @component
- * Users can add puppies to the roster by submitting this form.
+ * Users can add players to the roster by submitting this form.
  */
-export default function PuppyForm() {
+export default function PlayerForm() {
   const [name, setName] = useState("");
   const [breed, setBreed] = useState("");
 
-  // TODO: Use the `addPlayer` mutation to add a Player when the form is submitted
-  const [addPuppy, { isLoading, error }] = useAddPuppyMutation();
+  // Use the `addPlayer` mutation to add a Player when the form is submitted
+  const [addPlayer, { isLoading, error }] = useAddPlayerMutation();
 
-  async function postPuppy(event) {
+  async function postPlayer(event) {
     event.preventDefault();
 
     // Placeholder image w/ random photos of dogs
     const imageUrl = "https://loremflickr.com/200/300/dog";
     try {
-      await addPuppy({ name, breed, imageUrl }).unwrap();
+      await addPlayer({ name, breed, imageUrl }).unwrap();
     } catch (err) {
-      console.error("Failed to add the Puppy:", err);
+      console.error("Failed to add the Player:", err);
     }
   }
 
   return (
     <>
       <h2>Add a Player</h2>
-      <form onSubmit={postPuppy}>
+      <form onSubmit={postPlayer}>
         <label>
           Name
           <input
-            name="puppyName"
+            name="playerName"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -47,7 +47,7 @@ export default function PuppyForm() {
         <button type="submit" disabled={isLoading}>
           {isLoading ? "Adding..." : "Add to Roster"}
         </button>
-        {isLoading && <output>Uploading <Puppy></Puppy> information...</output>}
+        {isLoading && <output>Uploading Player information...</output>} // Update output message
         {error && <output>{error.message}</output>}
       </form>
     </>
